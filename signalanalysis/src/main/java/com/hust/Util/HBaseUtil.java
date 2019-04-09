@@ -9,7 +9,7 @@ import java.io.IOException;
 
 /**
  * @Author: Konfuse
- * @Date: 19-3-13 下午09:17
+ * @Date: 19-04-09 下午04:17
  */
 public class HBaseUtil {
     public static Connection init() throws IOException {

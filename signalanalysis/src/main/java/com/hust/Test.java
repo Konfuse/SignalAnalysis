@@ -1,43 +1,30 @@
 package com.hust;
 
-import com.hust.Util.HBaseUtil;
-import org.apache.hadoop.hbase.client.Connection;
+import com.alibaba.fastjson.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.regex.Pattern;
 
 /**
  * @Author: Konfuse
  * @Date: 19-4-9 下午9:00
  */
 public class Test {
+    public static enum ValueType {
+        BDGD,
+        BDQD;
+    }
+
     public static void main(String[] args) {
-        String path = "/home/konfuse/Documents/WorkDir/EvaporationWave.csv";
-
-        BufferedReader reader;
-        double lon;
-        double lat;
-        int count;
-        String item[];
-        String line;
-
-        try {
-            count = 0;
-            reader = new BufferedReader(new FileReader(path));
-            System.out.println(reader.readLine());
-            while ((line = reader.readLine()) != null) {
-                item = line.split(",");
-//                for (int i = 0; i < item.length; i++) {
-//                    System.out.print(item[i] + ";");
-//                }
-//                System.out.println();
-                lon = Double.parseDouble(item[0]);
-                lat = Double.parseDouble(item[1]);
-                count ++;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        HashMap<String, Double> mapSum = new HashMap<>();
+        for (int i = 1; i <= 12; i++) {
+            mapSum.put(String.format("%02d", i), 0.0);
         }
+        String some = "12";
+        mapSum.compute("02", (k, v) -> {
+            if (v == null) return 0.0;
+            return v + Double.parseDouble(some);
+        });
+        System.out.println(mapSum.toString());
     }
 }

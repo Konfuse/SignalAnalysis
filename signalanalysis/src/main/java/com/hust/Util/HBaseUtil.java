@@ -3,9 +3,12 @@ package com.hust.Util;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.filter.*;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author: Konfuse
@@ -127,7 +130,6 @@ public class HBaseUtil {
                 e.printStackTrace();
             }
         }
-
         return result;
     }
 
@@ -135,18 +137,7 @@ public class HBaseUtil {
         Connection conn = null;
         try {
             conn = init();
-            Table table = conn.getTable(TableName.valueOf(tableName));
-            String result = null;
-            Get get = new Get(row.getBytes());
-            if (!get.isCheckExistenceOnly()) {
-                get.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes(column));
-                Result res = table.get(get);
-                byte[] resByte = res.getValue(Bytes.toBytes(columnFamily), Bytes.toBytes(column));
-                result = Bytes.toString(resByte);
-                return result;
-            } else {
-                return "the result doesn't exist!";
-            }
+            return getCellData(conn, tableName, row, columnFamily, column);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -172,6 +163,74 @@ public class HBaseUtil {
             result = Bytes.toString(resByte);
             return result;
         }
+    }
+
+    private static List<Result> getResultsFromScan(String tableName, Scan scan) {
+        Connection conn = null;
+        List<Result> list = null;
+        try {
+            conn = init();
+            Table table = conn.getTable(TableName.valueOf(tableName));
+
+            //get result
+            ResultScanner results = table.getScanner(scan);
+            list = new ArrayList<>();
+            for (Result result : results) {
+                list.add(result);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                closeAll(conn);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
+    public static List<Result> getDataByFilter(String tableName, String startRowKey, String endRowKey, String regexKey, int num) {
+
+        //create a list of filter
+        FilterList filterList = new FilterList(FilterList.Operator.MUST_PASS_ALL);
+
+        //a row filter using regex
+        RegexStringComparator rc = new RegexStringComparator(regexKey);
+        RowFilter rowFilter = new RowFilter(CompareFilter.CompareOp.EQUAL, rc);
+
+        //filter the the num in a page
+        Filter filterNum = new PageFilter(num);
+
+        //add them into filter list
+        filterList.addFilter(rowFilter);
+        filterList.addFilter(filterNum);
+
+        //setup a scan and set the range and regex of row
+        Scan scan = new Scan();
+        scan.setStartRow(startRowKey.getBytes());
+        scan.setStopRow(endRowKey.getBytes());
+        scan.setFilter(filterList);
+
+        //get result
+        return getResultsFromScan(tableName, scan);
+    }
+
+    public static List<Result> getDataByRange(String tableName, String startRowKey, String endRowKey) {
+        Scan scan = new Scan();
+        scan.setStartRow(startRowKey.getBytes());
+        scan.setStopRow(endRowKey.getBytes());
+        return getResultsFromScan(tableName, scan);
+    }
+
+    public static List<Result> getDataByRegex(String tableName, String regexKey) {
+        //a row filter using regex
+        RegexStringComparator rc = new RegexStringComparator(regexKey);
+        RowFilter rowFilter = new RowFilter(CompareFilter.CompareOp.EQUAL, rc);
+
+        Scan scan = new Scan();
+        scan.setFilter(rowFilter);
+        return getResultsFromScan(tableName, scan);
     }
 
     public static void deleteByRow(String tableName, String row) {

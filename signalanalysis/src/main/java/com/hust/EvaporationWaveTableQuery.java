@@ -133,7 +133,7 @@ public class EvaporationWaveTableQuery {
         String[] date;
         HashMap<String, Double> mapSum = new HashMap<>();
         HashMap<String, Integer> mapNum = new HashMap<>();
-
+        //judge type of value
         if (valueType == ValueType.BDGD) {
             type = "bdgd";
         } else {
@@ -162,11 +162,11 @@ public class EvaporationWaveTableQuery {
             date = row.substring(0, row.indexOf(":")).split("-");
             String finalValue = value;
             mapSum.compute(date[0], (k, v) -> {
-               if (v == null) return 0.0;
+               if (v == null) return Double.parseDouble(finalValue);
                return v + Double.parseDouble(finalValue);
             });
             mapNum.compute(date[0], (k, v) -> {
-                if (v == null) return 0;
+                if (v == null) return 1;
                 return v + 1;
             });
         }
@@ -174,6 +174,55 @@ public class EvaporationWaveTableQuery {
         //build json object
         for (String key : mapSum.keySet()) {
             jsonObject.put(key, mapSum.get(key) / mapNum.get(key));
+        }
+        return jsonObject.toJSONString();
+    }
+
+    public String queryProbabilityOnMonth(ValueType valueType, int month, int lon, int lat) {
+        JSONObject jsonObject = new JSONObject();
+        String type;
+        String row = null;
+        String value = null;
+        long sum = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        //judge type of value
+        if (valueType == ValueType.BDGD) {
+            type = "bdgd";
+        } else {
+            type = "bdqd";
+        }
+
+        //create regex for querying
+        String regex = "[\\d]{4}"
+                + String.format("%02d", month)
+                + "[\\d]+:"
+                + String.format("%03d", lon)
+                + ","
+                + String.format("%03d", lat);
+        List<Result> resultList = HBaseUtil.getDataByRegex(tableName, regex);
+
+        //travel result sets
+        for (Result result : resultList) {
+            for (Cell cell : result.listCells()) {
+                //if find the correct type, break and use the value
+                if ((Bytes.toString(CellUtil.cloneQualifier(cell))).equals(type)) {
+                    row = Bytes.toString(CellUtil.cloneRow(cell));
+                    value = Bytes.toString(CellUtil.cloneValue(cell));
+                    break;
+                }
+            }
+            if (row == null)
+                continue;
+            double finalValue = Double.parseDouble(value);
+            map.compute(((int)finalValue) / 5, (k, v)->{
+                if (v == null) return 1;
+                return v + 1;
+            });
+            sum++;
+        }
+        //build json object
+        for (Integer key : map.keySet()) {
+            jsonObject.put(String.valueOf(key), map.get(key) * 0.1 / sum);
         }
         return jsonObject.toJSONString();
     }

@@ -17,7 +17,15 @@ public class Test {
 
     public static void main(String[] args) {
         String content = "2017010312:110,110";
-        String pattern = ".*:110,111";
-        System.out.println(Pattern.matches(pattern, content));
+        String pattern = "[\\d]{4}01[\\d]+:110,110";
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int j = 0; j < 11; j++) {
+            map.put(j, 0);
+        }
+        map.compute(1, (k, v)->{
+            if (v == null) return 1;
+            return v+1;
+        });
+        System.out.println(map);
     }
 }

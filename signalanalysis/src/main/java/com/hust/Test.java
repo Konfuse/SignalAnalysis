@@ -16,15 +16,8 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        HashMap<String, Double> mapSum = new HashMap<>();
-        for (int i = 1; i <= 12; i++) {
-            mapSum.put(String.format("%02d", i), 0.0);
-        }
-        String some = "12";
-        mapSum.compute("02", (k, v) -> {
-            if (v == null) return 0.0;
-            return v + Double.parseDouble(some);
-        });
-        System.out.println(mapSum.toString());
+        String content = "2017010312:110,110";
+        String pattern = ".*:110,111";
+        System.out.println(Pattern.matches(pattern, content));
     }
 }

@@ -71,7 +71,7 @@ public class EvaporationWaveTableQuery {
         return list;
     }
 
-    public String queryByDateAndPos(ValueType valueType, int year, int lon, int lat) {
+    public String queryMonthAverage(ValueType valueType, int lon, int lat) {
         JSONObject jsonObject = new JSONObject();
         String row = null;
         String type;
@@ -94,8 +94,7 @@ public class EvaporationWaveTableQuery {
         }
 
         //create regex for querying
-        String regex = String.format("%04d", year)
-                + ".*:"
+        String regex = ".*:"
                 + String.format("%03d", lon)
                 + ","
                 + String.format("%03d", lat);
@@ -126,7 +125,7 @@ public class EvaporationWaveTableQuery {
         return jsonObject.toJSONString();
     }
 
-    public String queryByPos(ValueType valueType, int lon, int lat) {
+    public String queryYearAverage(ValueType valueType, int lon, int lat) {
         JSONObject jsonObject = new JSONObject();
         String type;
         String row = null;

@@ -37,6 +37,7 @@ public class EvaporationWaveTableInsert {
                 hour = item[5];
                 bdgd = item[6];
                 bdqd = item[7];
+                //row key format(yyyy-mm-dd-hh:xxx,yyy)
                 row = String.format("%04d", Integer.parseInt(year))
                         + "-"
                         + String.format("%02d", Integer.parseInt(month))

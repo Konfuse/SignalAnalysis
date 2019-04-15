@@ -1,7 +1,9 @@
 package com.hust;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.avro.data.Json;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,9 +20,7 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
-        list.add("jack");
-        list.add("anna");
-        System.out.println(list.toString());
+        String row = "43251:06-20";
+        System.out.println(row.substring(row.indexOf(":") + 1).split("-")[0]);
     }
 }

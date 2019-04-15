@@ -63,7 +63,7 @@ public class EvaporationWaveTableQuery {
             position = row.substring(row.indexOf(":") + 1);
             jsonObject.put("lon", position.substring(0, position.indexOf(",")));
             jsonObject.put("lat", position.substring(position.indexOf(",") + 1));
-            jsonObject.put(type, value);
+            jsonObject.put("value", value);
             list.add(jsonObject.toJSONString());
             jsonObject.clear();
         }

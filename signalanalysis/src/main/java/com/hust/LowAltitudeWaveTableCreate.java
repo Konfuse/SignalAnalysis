@@ -8,7 +8,7 @@ import com.hust.Util.HBaseUtil;
  */
 public class LowAltitudeWaveTableCreate {
     public static void main(String[] args) {
-        String[] columnFamilies = {"surface", "suspended"};
+        String[] columnFamilies = {"wave"};
         HBaseUtil.createTable("lowaltitude", columnFamilies);
     }
 }

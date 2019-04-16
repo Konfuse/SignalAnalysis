@@ -23,7 +23,7 @@ public class LowAltitudeWaveTableInsert {
         try {
             connection = HBaseUtil.init();
             reader = new BufferedReader(new FileReader(path));
-            reader.readLine();
+            System.out.println(reader.readLine());
             while ((line = reader.readLine()) != null) {
                 items = line.split(",");
                 siteId = items[0];
@@ -39,25 +39,22 @@ public class LowAltitudeWaveTableInsert {
                 houduAvg = items[10];
                 qiangduAvg = items[11];
 
-                //row format(siteId:mm-dd)
+                //row format(siteId:mm-dd:ductType)
                 row = siteId
                         + ":"
                         + String.format("%02d", Integer.parseInt(month))
                         + "-"
-                        + String.format("%02d", Integer.parseInt(hour));
-                if ("1".equals(ductType)) {
-                    family = "surface";
-                } else {
-                    family = "suspended";
-                }
-                HBaseUtil.insertData(connection, "lowaltitude", row, family, "dataCount", dataCount);
-                HBaseUtil.insertData(connection, "lowaltitude", row, family, "ductCount", ductCount);
-                HBaseUtil.insertData(connection, "lowaltitude", row, family, "dinggaoAvg", dinggaoAvg);
-                HBaseUtil.insertData(connection, "lowaltitude", row, family, "layerdigaoAvg", layerdigaoAvg);
-                HBaseUtil.insertData(connection, "lowaltitude", row, family, "digaoAvg", digaoAvg);
-                HBaseUtil.insertData(connection, "lowaltitude", row, family, "layerhouduAvg", layerhouduAvg);
-                HBaseUtil.insertData(connection, "lowaltitude", row, family, "houduAvg", houduAvg);
-                HBaseUtil.insertData(connection, "lowaltitude", row, family, "qiangduAvg", qiangduAvg);
+                        + String.format("%02d", Integer.parseInt(hour))
+                        + ":"
+                        + String.format("%02d", Integer.parseInt(ductType));
+                HBaseUtil.insertData(connection, "lowaltitude", row, "wave", "dataCount", dataCount);
+                HBaseUtil.insertData(connection, "lowaltitude", row, "wave", "ductCount", ductCount);
+                HBaseUtil.insertData(connection, "lowaltitude", row, "wave", "dinggaoAvg", dinggaoAvg);
+                HBaseUtil.insertData(connection, "lowaltitude", row, "wave", "layerdigaoAvg", layerdigaoAvg);
+                HBaseUtil.insertData(connection, "lowaltitude", row, "wave", "digaoAvg", digaoAvg);
+                HBaseUtil.insertData(connection, "lowaltitude", row, "wave", "layerhouduAvg", layerhouduAvg);
+                HBaseUtil.insertData(connection, "lowaltitude", row, "wave", "houduAvg", houduAvg);
+                HBaseUtil.insertData(connection, "lowaltitude", row, "wave", "qiangduAvg", qiangduAvg);
             }
         } catch (IOException e) {
             e.printStackTrace();

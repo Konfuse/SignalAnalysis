@@ -20,7 +20,8 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        String row = "43251:06-20";
-        System.out.println(row.substring(row.indexOf(":") + 1).split("-")[0]);
+        String row = "43251:06-20:01";
+        String regex = "43251" + ":[\\d]{2}-[\\d]{2}:" + "02";
+        System.out.println(row.substring(0, row.indexOf("-")).split(":")[1]);
     }
 }

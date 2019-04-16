@@ -193,9 +193,9 @@ public class EvaporationWaveTableQuery {
         }
 
         //create regex for querying
-        String regex = "[\\d]{4}"
+        String regex = "[\\d]{4}-"
                 + String.format("%02d", month)
-                + "[\\d]+:"
+                + "-[\\d]{2}-[\\d]{2}:"
                 + String.format("%03d", lon)
                 + ","
                 + String.format("%03d", lat);

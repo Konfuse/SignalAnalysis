@@ -20,14 +20,17 @@ public class ZTest {
         BDQD;
     }
 
-    public static void main(String[] args) {
-        String path = "C:/Users/Konfuse/Desktop/BigDataProject/LowAltitudeWaveFake.csv";
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(path));
-            System.out.println(reader.readLine());
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void main(String[] args) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendarStart = Calendar.getInstance();
+        calendarStart.setTime(simpleDateFormat.parse("2008-01-01"));
+        Calendar calendarEnd = Calendar.getInstance();
+        calendarEnd.setTime(simpleDateFormat.parse("2016-12-31"));
+        long count = 0;
+        while (!calendarStart.equals(calendarEnd)) {
+            count++;
+            System.out.println("Step: " + count);
+            calendarStart.add(Calendar.DAY_OF_YEAR, 1);
         }
     }
 }

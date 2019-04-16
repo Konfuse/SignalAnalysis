@@ -19,9 +19,8 @@ public class WriteFakeLowAltitudeWave {
 
         try {
             writer = new BufferedWriter(new FileWriter(path));
-            writer.newLine();
             writer.write("SiteNum,Month,Hour,DuctType,DataCount,DuctCount,DingGao_Average,LayerDiGao_Average,DiGao_Average,LayerHouDu_Average,HouDu_Average,QiangDu_Average");
-            for (int site = 47102; site < 47132; site++) {
+            for (int site = 47103; site < 47132; site++) {
                 for (int month : months) {
                     for (int hour : hours) {
                         for (int ductType : ductTypes) {

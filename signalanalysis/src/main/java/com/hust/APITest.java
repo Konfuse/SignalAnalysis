@@ -6,10 +6,13 @@ package com.hust;
  */
 public class APITest {
     public static void main(String[] args) {
-        EvaporationWaveTableQuery query = new EvaporationWaveTableQuery();
-        System.out.println(query.queryByDate(EvaporationWaveTableQuery.ValueType.BDGD, 2017, 1, 3, 12));
-        System.out.println(query.queryMonthAverage(EvaporationWaveTableQuery.ValueType.BDGD, 110, 3));
-        System.out.println(query.queryYearAverage(EvaporationWaveTableQuery.ValueType.BDGD, 2017, 110));
-        System.out.println(query.queryProbabilityOnMonth(EvaporationWaveTableQuery.ValueType.BDGD, 1, 110, 3));
+        EvaporationWaveTableQuery evaporationWaveTableQuery = new EvaporationWaveTableQuery();
+        System.out.println(evaporationWaveTableQuery.queryByDate(EvaporationWaveTableQuery.ValueType.BDGD, 2017, 1, 3, 12));
+        System.out.println(evaporationWaveTableQuery.queryMonthAverage(EvaporationWaveTableQuery.ValueType.BDGD, 110, 3));
+        System.out.println(evaporationWaveTableQuery.queryYearAverage(EvaporationWaveTableQuery.ValueType.BDGD, 110, 3));
+        System.out.println(evaporationWaveTableQuery.queryProbabilityOnMonth(EvaporationWaveTableQuery.ValueType.BDGD, 1, 110, 3));
+        LowAltitudeWaveTableQuery lowAltitudeWaveTableQuery = new LowAltitudeWaveTableQuery();
+        System.out.println(lowAltitudeWaveTableQuery.queryProbablyPerMonth("47122", LowAltitudeWaveTableQuery.DuctType.SURFACE));
+        System.out.println(lowAltitudeWaveTableQuery.queryMonthAverage("47122", LowAltitudeWaveTableQuery.DuctType.SURFACE, LowAltitudeWaveTableQuery.DataType.SURFACE_GD));
     }
 }

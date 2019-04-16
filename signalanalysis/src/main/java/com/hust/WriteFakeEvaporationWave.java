@@ -27,11 +27,10 @@ public class WriteFakeEvaporationWave {
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(path));
-            writer.newLine();
             writer.write("LON,LAT,YEAR,MONTH,DAY,HOUR,BDGD,BDQD");
-            while (!calendarStart.equals(calendarEnd)) {
-                for (lon = 0; lon <= 50; lon++) {
-                    for (lat = 100; lat<=150; lat++) {
+            for (lon = 100; lon <= 150; lon++) {
+                for (lat = 0; lat<= 50; lat++) {
+                    while (!calendarStart.equals(calendarEnd)) {
                         for (int hour : hours) {
                             date = simpleDateFormat.format(calendarStart.getTime()).split("-");
                             row = lon + "," + lat + "," + date[0] + "," + date[1] + "," + date[2] + "," + hour + "," + (Math.random() * 40) + "," + (Math.random() * 203);
@@ -39,10 +38,11 @@ public class WriteFakeEvaporationWave {
                             writer.newLine();
                             writer.write(row);
                         }
+                        calendarStart.add(Calendar.DAY_OF_YEAR, 1);
                     }
                 }
-                calendarStart.add(Calendar.DAY_OF_YEAR, 1);
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

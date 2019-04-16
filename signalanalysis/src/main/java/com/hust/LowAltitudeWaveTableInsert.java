@@ -47,6 +47,7 @@ public class LowAltitudeWaveTableInsert {
                         + String.format("%02d", Integer.parseInt(hour))
                         + ":"
                         + String.format("%02d", Integer.parseInt(ductType));
+                System.out.println(row);
                 HBaseUtil.insertData(connection, "lowaltitude", row, "wave", "dataCount", dataCount);
                 HBaseUtil.insertData(connection, "lowaltitude", row, "wave", "ductCount", ductCount);
                 HBaseUtil.insertData(connection, "lowaltitude", row, "wave", "dinggaoAvg", dinggaoAvg);

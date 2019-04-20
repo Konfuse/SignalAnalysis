@@ -11,6 +11,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Konfuse
@@ -22,13 +23,19 @@ public class EvaporationWaveTableQuery {
         BDGD,
         BDQD;
     }
+    public static enum DateType {
+        YEAR,
+        MONTH;
+    }
 
-    public List<String> queryByDate(ValueType valueType, int year, int month, int day, int hour) {
+    public List<String> queryByDate(ValueType valueType, DateType dateType, int date, int hour) {
         List<String> list = new LinkedList<>();
         String row = null;
-        String position, type;
+        String position, type, regex = null;
         String value = null;
         JSONObject jsonObject = new JSONObject();
+        Map<String, Double> locSum = new HashMap<>();
+        Map<String, Long> locNum = new HashMap<>();
 
         if (valueType == ValueType.BDGD) {
             type = "bdgd";
@@ -37,14 +44,26 @@ public class EvaporationWaveTableQuery {
         }
 
         //create regex for querying
-        String regex = String.format("%04d", year)
-                + "-"
-                + String.format("%02d", month)
-                + "-"
-                + String.format("%02d", day)
-                + "-"
-                + String.format("%02d", hour)
-                + ".*";
+        if (dateType == DateType.MONTH) {
+            regex = "[\\d]{4}"
+                    + "-"
+                    + String.format("%02d", date)
+                    + "-"
+                    + "[\\d]{2}"
+                    + "-"
+                    + String.format("%02d", hour)
+                    + ".*";
+        } else {
+            regex = String.format("%04d", date)
+                    + "-"
+                    + "[\\d]{2}"
+                    + "-"
+                    + "[\\d]{2}"
+                    + "-"
+                    + String.format("%02d", hour)
+                    + ".*";
+        }
+
         List<Result> resultList = HBaseUtil.getDataByRegex(tableName, regex);
 
         //travel result sets, convert value to json string, and push into a list
@@ -59,11 +78,24 @@ public class EvaporationWaveTableQuery {
             }
             if (row == null)
                 continue;
-            //build json object
+            //Calculation
             position = row.substring(row.indexOf(":") + 1);
+            double finalValue = Double.parseDouble(value);
+            locSum.compute(position, (k, v) -> {
+                if (v == null) return finalValue;
+                return v + finalValue;
+            });
+            locNum.compute(position, (k, v) -> {
+               if (v == null) return 1L;
+               return v + 1;
+            });
+        }
+
+        for (String key : locSum.keySet()) {
+            position = key.substring(row.indexOf(":") + 1);
             jsonObject.put("lon", position.substring(0, position.indexOf(",")));
             jsonObject.put("lat", position.substring(position.indexOf(",") + 1));
-            jsonObject.put("value", value);
+            jsonObject.put("value", locSum.get(key) / locNum.get(key));
             list.add(jsonObject.toJSONString());
             jsonObject.clear();
         }

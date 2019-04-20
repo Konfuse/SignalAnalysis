@@ -18,7 +18,7 @@ public class WriteFakeEvaporationWave {
         Calendar calendarStart = Calendar.getInstance();
         calendarStart.setTime(simpleDateFormat.parse("2008-01-01"));
         Calendar calendarEnd = Calendar.getInstance();
-        calendarEnd.setTime(simpleDateFormat.parse("2016-12-31"));
+        calendarEnd.setTime(simpleDateFormat.parse("2017-01-01"));
         int[] hours = {0, 6, 12, 18};
         int lon, lat;
         String row;
@@ -30,6 +30,7 @@ public class WriteFakeEvaporationWave {
             writer.write("LON,LAT,YEAR,MONTH,DAY,HOUR,BDGD,BDQD");
             for (lon = 100; lon <= 150; lon++) {
                 for (lat = 0; lat<= 50; lat++) {
+                    calendarStart.setTime(simpleDateFormat.parse("2008-01-01"));
                     while (!calendarStart.equals(calendarEnd)) {
                         for (int hour : hours) {
                             date = simpleDateFormat.format(calendarStart.getTime()).split("-");

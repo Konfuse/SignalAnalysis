@@ -7,7 +7,7 @@ package com.hust;
 public class APITest {
     public static void main(String[] args) {
         EvaporationWaveTableQuery evaporationWaveTableQuery = new EvaporationWaveTableQuery();
-        System.out.println(evaporationWaveTableQuery.queryByDate(EvaporationWaveTableQuery.ValueType.BDGD, 2017, 1, 3, 12));
+        System.out.println(evaporationWaveTableQuery.queryByDate(EvaporationWaveTableQuery.ValueType.BDGD, EvaporationWaveTableQuery.DateType.YEAR, 2017, 12));
         System.out.println(evaporationWaveTableQuery.queryMonthAverage(EvaporationWaveTableQuery.ValueType.BDGD, 110, 3));
         System.out.println(evaporationWaveTableQuery.queryYearAverage(EvaporationWaveTableQuery.ValueType.BDGD, 110, 3));
         System.out.println(evaporationWaveTableQuery.queryProbabilityOnMonth(EvaporationWaveTableQuery.ValueType.BDGD, 1, 110, 3));

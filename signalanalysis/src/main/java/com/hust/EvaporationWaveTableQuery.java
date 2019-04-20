@@ -92,7 +92,7 @@ public class EvaporationWaveTableQuery {
         }
 
         for (String key : locSum.keySet()) {
-            position = key.substring(row.indexOf(":") + 1);
+            position = key;
             jsonObject.put("lon", position.substring(0, position.indexOf(",")));
             jsonObject.put("lat", position.substring(position.indexOf(",") + 1));
             jsonObject.put("value", locSum.get(key) / locNum.get(key));

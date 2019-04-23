@@ -210,11 +210,9 @@ public class EvaporationWaveTableQuery {
         return jsonObject.toJSONString();
     }
 
-    public String queryProbabilityOnMonth(ValueType valueType, int month, int lon, int lat) {
+    public String queryProbability(ValueType valueType, DateType dateType, int date, int lon, int lat) {
         JSONObject jsonObject = new JSONObject();
-        String type;
-        String row = null;
-        String value = null;
+        String type, regex, row = null, value = null;
         long sum = 0;
         HashMap<Integer, Integer> map = new HashMap<>();
         //judge type of value
@@ -225,12 +223,26 @@ public class EvaporationWaveTableQuery {
         }
 
         //create regex for querying
-        String regex = "[\\d]{4}-"
-                + String.format("%02d", month)
-                + "-[\\d]{2}-[\\d]{2}:"
-                + String.format("%03d", lon)
-                + ","
-                + String.format("%03d", lat);
+        if (dateType == DateType.MONTH) {
+            regex = "[\\d]{4}"
+                    + "-"
+                    + String.format("%02d", date)
+                    + "-[\\d]{2}-[\\d]{2}:"
+                    + String.format("%03d", lon)
+                    + ","
+                    + String.format("%03d", lat);
+        } else {
+            regex = String.format("%04d", date)
+                    + "-"
+                    + "[\\d]{2}"
+                    + "-"
+                    + "[\\d]{2}"
+                    + "-"
+                    + "[\\d]{2}"
+                    + String.format("%03d", lon)
+                    + ","
+                    + String.format("%03d", lat);
+        }
         List<Result> resultList = HBaseUtil.getDataByRegex(tableName, regex);
 
         //travel result sets

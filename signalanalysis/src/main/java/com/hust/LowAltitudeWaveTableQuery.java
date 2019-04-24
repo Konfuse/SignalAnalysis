@@ -18,7 +18,7 @@ public class LowAltitudeWaveTableQuery {
     private static String tableName = "lowaltitude";
     public static enum DuctType {
         SURFACE,
-        SUSPENDED;
+        SUSPENDED
     }
     public static enum DataType {
         SURFACE_GD,
@@ -26,7 +26,7 @@ public class LowAltitudeWaveTableQuery {
         SUSPENDED_DINGGAO,
         SUSPENDED_DIGAO,
         SUSPENDED_HD,
-        SUSPENDED_QD;
+        SUSPENDED_QD
     }
 
 

@@ -151,7 +151,7 @@ public class HBaseUtil {
     }
 
     public static String getCellData(Connection conn, String tableName, String row, String columnFamily, String column) throws IOException {
-        String result = null;
+        String result;
         Table table = conn.getTable(TableName.valueOf(tableName));
         Get get = new Get(row.getBytes());
         if (get.isCheckExistenceOnly()) {

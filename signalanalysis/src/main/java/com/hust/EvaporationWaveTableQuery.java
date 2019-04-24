@@ -1,7 +1,6 @@
 package com.hust;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hust.Bean.EvaporationWave;
 import com.hust.Util.HBaseUtil;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
@@ -9,7 +8,6 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,21 +19,48 @@ public class EvaporationWaveTableQuery {
     private static String tableName = "evaporation";
     public static enum ValueType {
         BDGD,
-        BDQD;
+        BDQD
     }
     public static enum DateType {
         YEAR,
-        MONTH;
+        MONTH
     }
 
-    public List<String> queryByDate(ValueType valueType, DateType dateType, int date, int hour) {
-        List<String> list = new LinkedList<>();
-        String row = null;
-        String position, type, regex = null;
-        String value = null;
-        JSONObject jsonObject = new JSONObject();
-        Map<String, Double> locSum = new HashMap<>();
-        Map<String, Long> locNum = new HashMap<>();
+    public String queryHeatMapByDate(ValueType valueType, DateType dateType, int date) {
+        String type, regex;
+
+        if (valueType == ValueType.BDGD) {
+            type = "bdgd";
+        } else {
+            type = "bdqd";
+        }
+
+        //create regex for querying
+        if (dateType == DateType.MONTH) {
+            regex = "[\\d]{4}"
+                    + "-"
+                    + String.format("%02d", date)
+                    + "-"
+                    + "[\\d]{2}"
+                    + "-"
+                    + "[\\d]{2}"
+                    + ".*";
+        } else {
+            regex = String.format("%04d", date)
+                    + "-"
+                    + "[\\d]{2}"
+                    + "-"
+                    + "[\\d]{2}"
+                    + "-"
+                    + "[\\d]{2}"
+                    + ".*";
+        }
+
+        return queryHeatMapByDate(type, regex);
+    }
+
+    public String queryHeatMapByDate(ValueType valueType, DateType dateType, int date, int hour) {
+        String type, regex;
 
         if (valueType == ValueType.BDGD) {
             type = "bdgd";
@@ -63,6 +88,17 @@ public class EvaporationWaveTableQuery {
                     + String.format("%02d", hour)
                     + ".*";
         }
+
+        return queryHeatMapByDate(type, regex);
+    }
+
+    private String queryHeatMapByDate(String type, String regex) {
+        String row = null;
+        String position;
+        String value = null;
+        JSONObject jsonObject = new JSONObject();
+        Map<String, Double> locSum = new HashMap<>();
+        Map<String, Long> locNum = new HashMap<>();
 
         List<Result> resultList = HBaseUtil.getDataByRegex(tableName, regex);
 
@@ -92,18 +128,13 @@ public class EvaporationWaveTableQuery {
         }
 
         for (String key : locSum.keySet()) {
-            position = key;
-            jsonObject.put("lon", position.substring(0, position.indexOf(",")));
-            jsonObject.put("lat", position.substring(position.indexOf(",") + 1));
-            jsonObject.put("value", locSum.get(key) / locNum.get(key));
-            list.add(jsonObject.toJSONString());
-            jsonObject.clear();
+            jsonObject.put(key, locSum.get(key) / locNum.get(key));
         }
 
-        return list;
+        return jsonObject.toJSONString();
     }
 
-    public String queryMonthAverage(ValueType valueType, int lon, int lat) {
+    public String queryEveryMonthAverage(ValueType valueType, int lon, int lat) {
         JSONObject jsonObject = new JSONObject();
         String row = null;
         String type;
@@ -157,7 +188,7 @@ public class EvaporationWaveTableQuery {
         return jsonObject.toJSONString();
     }
 
-    public String queryYearAverage(ValueType valueType, int lon, int lat) {
+    public String queryEveryYearAverage(ValueType valueType, int lon, int lat) {
         JSONObject jsonObject = new JSONObject();
         String type;
         String row = null;

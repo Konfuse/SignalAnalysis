@@ -17,7 +17,7 @@ public class PredictionTableQuery {
     private static String tableName = "prediction";
     public static enum PredictionType {
         BDGD,
-        BDQD;
+        BDQD
     }
 
     public String preditByDate(PredictionType predictionType, int year, int month, int day, int lon, int lat) {

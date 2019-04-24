@@ -20,17 +20,7 @@ public class ZTest {
         BDQD;
     }
 
-    public static void main(String[] args) throws ParseException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendarStart = Calendar.getInstance();
-        calendarStart.setTime(simpleDateFormat.parse("2008-01-01"));
-        Calendar calendarEnd = Calendar.getInstance();
-        calendarEnd.setTime(simpleDateFormat.parse("2016-12-31"));
-        long count = 0;
-        while (!calendarStart.equals(calendarEnd)) {
-            count++;
-            System.out.println("Step: " + count);
-            calendarStart.add(Calendar.DAY_OF_YEAR, 1);
-        }
+    public static void main(String[] args) {
+        System.out.println(ValueType.BDGD.toString().toLowerCase());
     }
 }

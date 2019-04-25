@@ -6,12 +6,15 @@ package com.hust;
  */
 public class APITest {
     public static void main(String[] args) {
-        EvaporationWaveTableQuery evaporationWaveTableQuery = new EvaporationWaveTableQuery();
-        System.out.println(evaporationWaveTableQuery.queryHeatMapByDate(EvaporationWaveTableQuery.ValueType.BDGD, EvaporationWaveTableQuery.DateType.YEAR, 2017));
-        System.out.println(evaporationWaveTableQuery.queryHeatMapByDate(EvaporationWaveTableQuery.ValueType.BDGD, EvaporationWaveTableQuery.DateType.YEAR, 2017, 12));
-        System.out.println(evaporationWaveTableQuery.queryEveryMonthAverage(EvaporationWaveTableQuery.ValueType.BDGD, 110, 3));
-        System.out.println(evaporationWaveTableQuery.queryEveryYearAverage(EvaporationWaveTableQuery.ValueType.BDGD, 110, 3));
-        System.out.println(evaporationWaveTableQuery.queryProbability(EvaporationWaveTableQuery.ValueType.BDGD, EvaporationWaveTableQuery.DateType.YEAR, 2017, 110, 3));
+        ResultTableQuery resultTableQuery = new ResultTableQuery();
+        System.out.println(resultTableQuery.getYearHeatMap(ResultTableQuery.ValueType.BDQD, 2017, 6));
+        System.out.println(resultTableQuery.getYearHeatMap(ResultTableQuery.ValueType.BDQD, 2017));
+        System.out.println(resultTableQuery.getMonthHeatMap(ResultTableQuery.ValueType.BDQD, 2, 6));
+        System.out.println(resultTableQuery.getMonthHeatMap(ResultTableQuery.ValueType.BDQD, 2));
+        System.out.println(resultTableQuery.getEveryYearAverage(ResultTableQuery.ValueType.BDQD, 100, 3));
+        System.out.println(resultTableQuery.getEveryMonthAverage(ResultTableQuery.ValueType.BDQD, 100, 3));
+        System.out.println(resultTableQuery.getYearProbability(ResultTableQuery.ValueType.BDQD, 2017, 100, 3));
+        System.out.println(resultTableQuery.getMonthProbability(ResultTableQuery.ValueType.BDQD, 2, 100, 3));
 
         LowAltitudeWaveTableQuery lowAltitudeWaveTableQuery = new LowAltitudeWaveTableQuery();
         System.out.println(lowAltitudeWaveTableQuery.queryProbablyPerMonth("47122", LowAltitudeWaveTableQuery.DuctType.SURFACE));

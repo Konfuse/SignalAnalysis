@@ -99,15 +99,15 @@ public class ResultTableInsert {
 
             row = "year_probability";
             //insert year probability
-            //row.format(year_probability:xxx,yyy)
-            //column.format(YYYY)
+            //row.format(year_probability:YYYY:xxx,yyy)
+            //column.format(value)
             System.out.println("process year year probability...");
             for (int year = 2008; year < 2018; year++) {
                 for (String type : types) {
                     for (int lon = 100; lon <= 150; lon++) {
                         for (int lat = 0; lat <= 50; lat++) {
                             result = query.queryProbability(EvaporationWaveTableQuery.ValueType.valueOf(type.toUpperCase()), EvaporationWaveTableQuery.DateType.YEAR, year, lon, lat);
-                            HBaseUtil.insertData(conn, "result_of_evaporation", row + ":" + String.format("%03d", lon) + "," + String.format("%03d", lat), type, String.format("%04d", year), result);
+                            HBaseUtil.insertData(conn, "result_of_evaporation", row + ":" + String.format("%04d", year) + ":" + String.format("%03d", lon) + "," + String.format("%03d", lat), type, "value", result);
                         }
                     }
                 }
@@ -115,15 +115,15 @@ public class ResultTableInsert {
 
             row = "month_probability";
             //insert month probability
-            //row.format(month_probability:xxx,yyy)
-            //column.format(mm)
+            //row.format(month_probability:mm:xxx,yyy)
+            //column.format(value)
             System.out.println("process month probability...");
             for (int month = 1; month < 13; month++) {
                 for (String type : types) {
                     for (int lon = 100; lon <= 150; lon++) {
                         for (int lat = 0; lat <= 50; lat++) {
                             result = query.queryProbability(EvaporationWaveTableQuery.ValueType.valueOf(type.toUpperCase()), EvaporationWaveTableQuery.DateType.MONTH, month, lon, lat);
-                            HBaseUtil.insertData(conn, "result_of_evaporation", row + ":" + String.format("%03d", lon) + "," + String.format("%03d", lat), type, String.format("%02d", month), result);
+                            HBaseUtil.insertData(conn, "result_of_evaporation", row + ":" + String.format("%02d", month) + ":" + String.format("%03d", lon) + "," + String.format("%03d", lat), type, "value", result);
                         }
                     }
                 }

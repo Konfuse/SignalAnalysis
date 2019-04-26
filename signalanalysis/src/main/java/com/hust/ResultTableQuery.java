@@ -50,14 +50,14 @@ public class ResultTableQuery {
     }
 
     public String getYearProbability(ValueType valueType, int year, int lon, int lat) {
-        String row = "year_probability:" + String.format("%03d", lon) + "," + String.format("%03d", lat);
-        String column = String.format("%04d", year);
+        String row = "year_probability:" + String.format("%04d", year) + ":" + String.format("%03d", lon) + "," + String.format("%03d", lat);
+        String column = "value";
         return HBaseUtil.getCellData(tableName, row, valueType.toString().toLowerCase(), column);
     }
 
     public String getMonthProbability(ValueType valueType, int month, int lon, int lat) {
-        String row = "month_probability:" + String.format("%03d", lon) + "," + String.format("%03d", lat);
-        String column = String.format("%02d", month);
+        String row = "month_probability:" + String.format("%02d", month) + ":" + String.format("%03d", lon) + "," + String.format("%03d", lat);
+        String column = "value";
         return HBaseUtil.getCellData(tableName, row, valueType.toString().toLowerCase(), column);
     }
 }

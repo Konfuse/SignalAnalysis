@@ -8,6 +8,7 @@ import com.hust.Util.HBaseUtil;
  */
 public class ResultTableCreate {
     public static void main(String[] args) {
+        HBaseUtil.deleteTable("result_of_evaporation");
         String[] columnFamilies = {"bdgd", "bdqd"};
         HBaseUtil.createTable("result_of_evaporation", columnFamilies);
     }

@@ -1,8 +1,6 @@
 package com.hust;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,7 +11,8 @@ import java.util.Calendar;
  */
 public class WriteFakeEvaporationWave {
     public static void main(String[] args) throws ParseException {
-        String path = "C:/Users/Konfuse/Desktop/BigDataProject/EvaporationWaveFake.csv";
+        String fakePath = "/home/test/Documents/data/EvaporationWaveFake.csv";
+        String path = "/home/test/Documents/data/EvaporationWaveFake.csv";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendarStart = Calendar.getInstance();
         calendarStart.setTime(simpleDateFormat.parse("2008-01-01"));
@@ -21,12 +20,12 @@ public class WriteFakeEvaporationWave {
         calendarEnd.setTime(simpleDateFormat.parse("2017-01-01"));
         int[] hours = {0, 6, 12, 18};
         int lon, lat;
-        String row;
+        String row, line;
         String[] date;
 
         BufferedWriter writer = null;
         try {
-            writer = new BufferedWriter(new FileWriter(path));
+            writer = new BufferedWriter(new FileWriter(fakePath));
             writer.write("LON,LAT,YEAR,MONTH,DAY,HOUR,BDGD,BDQD");
             for (lon = 100; lon <= 150; lon++) {
                 for (lat = 0; lat<= 50; lat++) {
@@ -44,6 +43,11 @@ public class WriteFakeEvaporationWave {
                 }
             }
 
+            BufferedReader reader = new BufferedReader(new FileReader(path));
+            while ((line = reader.readLine()) != null) {
+                writer.newLine();
+                writer.write(line);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

@@ -21,7 +21,7 @@ public class ResultTableInsertFromCsv {
         BufferedReader reader;
         String[] item, columns;
         String line, row;
-        int lon, lat, year, month, day, hour;
+        int lon, lat, year, month, day, hour, count = 0;
         double bdgd, bdqd;
         Map<String, Map<String, Double>> heatYearMap_BDGD = new HashMap<>(), heatMonthMap_BDGD = new HashMap<>();
         Map<String, Map<String, Double>> heatYearMap_BDQD = new HashMap<>(), heatMonthMap_BDQD = new HashMap<>();
@@ -34,6 +34,7 @@ public class ResultTableInsertFromCsv {
         Map<String, Long> yearProbMap_Num = new HashMap<>(), monthProbMap_Num = new HashMap<>();
 
         try {
+            System.out.println("start import data from csv...");
             reader = new BufferedReader(new FileReader(path));
             while ((line = reader.readLine()) != null) {
                 item = line.split(",");
@@ -275,7 +276,9 @@ public class ResultTableInsertFromCsv {
                     if (v == null) return 1L;
                     return v + 1;
                 });
+                System.out.println("data " + (++count) + "has been processed..");
             }
+            System.out.println("process all data.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -291,6 +294,7 @@ public class ResultTableInsertFromCsv {
                 HBaseUtil.insertData(conn, tableName, "heat_year_average", "bdgd", key, heatYearMap_BDGD.get(key).toString());
                 HBaseUtil.insertData(conn, tableName, "heat_year_average", "bdqd", key, heatYearMap_BDQD.get(key).toString());
             }
+            System.out.println("heat year map done...");
             //travel heat month map
             for (String key : heatMonthMap_BDGD.keySet()) {
                 for (String s : heatMonthMap_BDGD.get(key).keySet()) {
@@ -300,6 +304,7 @@ public class ResultTableInsertFromCsv {
                 HBaseUtil.insertData(conn, tableName, "heat_month_average", "bdgd", key, heatMonthMap_BDGD.get(key).toString());
                 HBaseUtil.insertData(conn, tableName, "heat_month_average", "bdqd", key, heatMonthMap_BDQD.get(key).toString());
             }
+            System.out.println("heat month map done...");
             //travel every year average
             for (String key : yearAvgMap_BDGD.keySet()) {
                 for (String s : yearAvgMap_BDGD.get(key).keySet()) {
@@ -309,6 +314,7 @@ public class ResultTableInsertFromCsv {
                 HBaseUtil.insertData(conn, tableName, key, "bdgd", "value", yearAvgMap_BDGD.get(key).toString());
                 HBaseUtil.insertData(conn, tableName, key, "bdqd", "value", yearAvgMap_BDQD.get(key).toString());
             }
+            System.out.println("every year average done...");
             //travel every month average
             for (String key : monthAvgMap_BDGD.keySet()) {
                 for (String s : monthAvgMap_BDGD.get(key).keySet()) {
@@ -318,6 +324,7 @@ public class ResultTableInsertFromCsv {
                 HBaseUtil.insertData(conn, tableName, key, "bdgd", "value", monthAvgMap_BDGD.get(key).toString());
                 HBaseUtil.insertData(conn, tableName, key, "bdqd", "value", monthAvgMap_BDQD.get(key).toString());
             }
+            System.out.println("every month average done...");
             //travel year probability
             for (String key : yearProbMap_BDGD.keySet()) {
                 for (int s : yearProbMap_BDGD.get(key).keySet()) {
@@ -327,6 +334,7 @@ public class ResultTableInsertFromCsv {
                 HBaseUtil.insertData(conn, tableName, key, "bdgd", "value", yearProbMap_BDGD.get(key).toString());
                 HBaseUtil.insertData(conn, tableName, key, "bdqd", "value", yearProbMap_BDQD.get(key).toString());
             }
+            System.out.println("year probability done...");
             //travel month probability
             for (String key : monthProbMap_BDGD.keySet()) {
                 for (int s : monthProbMap_BDGD.get(key).keySet()) {
@@ -336,6 +344,7 @@ public class ResultTableInsertFromCsv {
                 HBaseUtil.insertData(conn, tableName, key, "bdgd", "value", monthProbMap_BDGD.get(key).toString());
                 HBaseUtil.insertData(conn, tableName, key, "bdqd", "value", monthProbMap_BDQD.get(key).toString());
             }
+            System.out.println("month probability done...\nAll done.");
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

@@ -12,7 +12,7 @@ import java.util.Calendar;
 public class WriteFakeEvaporationWave {
     public static void main(String[] args) throws ParseException {
         String fakePath = "/home/test/Documents/data/EvaporationWaveFake.csv";
-        String path = "/home/test/Documents/data/EvaporationWaveFake.csv";
+        String path = "/home/test/Documents/data/EvaporationWave.csv";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendarStart = Calendar.getInstance();
         calendarStart.setTime(simpleDateFormat.parse("2008-01-01"));
@@ -28,7 +28,7 @@ public class WriteFakeEvaporationWave {
             writer = new BufferedWriter(new FileWriter(fakePath));
             writer.write("LON,LAT,YEAR,MONTH,DAY,HOUR,BDGD,BDQD");
             for (lon = 100; lon <= 150; lon++) {
-                for (lat = 0; lat<= 50; lat++) {
+                for (lat = 0; lat <= 50; lat++) {
                     calendarStart.setTime(simpleDateFormat.parse("2008-01-01"));
                     while (!calendarStart.equals(calendarEnd)) {
                         for (int hour : hours) {

@@ -7,6 +7,8 @@ package com.hust;
 public class APITest {
     public static void main(String[] args) {
         ResultTableQuery resultTableQuery = new ResultTableQuery();
+        System.out.println(resultTableQuery.getAllYearHeatMap(ResultTableQuery.ValueType.BDQD, 6));
+        System.out.println(resultTableQuery.getAllYearHeatMap(ResultTableQuery.ValueType.BDQD));
         System.out.println(resultTableQuery.getYearHeatMap(ResultTableQuery.ValueType.BDQD, 2017, 6));
         System.out.println(resultTableQuery.getYearHeatMap(ResultTableQuery.ValueType.BDQD, 2017));
         System.out.println(resultTableQuery.getMonthHeatMap(ResultTableQuery.ValueType.BDQD, 2, 6));

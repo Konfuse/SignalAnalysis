@@ -17,7 +17,7 @@ public class EvaporationWaveTableInsert {
 
         Connection conn = null;
         BufferedReader reader;
-        String item[];
+        String[] item;
         String line;
         String row, lon, lat, year, month, day, hour, bdgd, bdqd;
 

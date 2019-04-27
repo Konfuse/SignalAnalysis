@@ -47,7 +47,9 @@ public class ResultTableInsertFromCsv {
                 //heat year map
                 columns = new String[] {
                         String.format("%04d", year) + "-" + String.format("%02d", hour),
-                        String.format("%04d", year)
+                        String.format("%04d", year),
+                        "all",
+                        "all-" + String.format("%02d", hour)
                 };
                 for (String column : columns) {
                     String finalJsonKey = String.format("%03d", lon) + "," + String.format("%03d", lat);

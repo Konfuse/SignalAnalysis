@@ -13,6 +13,18 @@ public class ResultTableQuery {
         BDQD
     }
 
+    public String getAllYearHeatMap(ValueType valueType) {
+        String row = "heat_year_average";
+        String column = "all";
+        return HBaseUtil.getCellData(tableName, row, valueType.toString().toLowerCase(), column);
+    }
+
+    public String getAllYearHeatMap(ValueType valueType, int hour) {
+        String row = "heat_year_average";
+        String column = "all-" + String.format("%02d", hour);
+        return HBaseUtil.getCellData(tableName, row, valueType.toString().toLowerCase(), column);
+    }
+
     public String getYearHeatMap(ValueType valueType, int year, int hour) {
         String row = "heat_year_average";
         String column = String.format("%04d", year) + "-" + String.format("%02d", hour);

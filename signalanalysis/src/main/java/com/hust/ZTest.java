@@ -11,7 +11,7 @@ public class ZTest {
         BufferedReader reader;
         BufferedWriter writer = null;
         String fakePath = "/home/test/Documents/data/EvaporationWaveFake.csv";
-        String path = "/home/test/Documents/data/EvaporationWaveFake.csv";
+        String path = "/home/test/Documents/data/EvaporationWave.csv";
         String line;
         try {
             reader = new BufferedReader(new FileReader(path));

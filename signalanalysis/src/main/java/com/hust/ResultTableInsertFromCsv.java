@@ -36,6 +36,7 @@ public class ResultTableInsertFromCsv {
         try {
             System.out.println("start import data from csv...");
             reader = new BufferedReader(new FileReader(path));
+            reader.readLine();
             while ((line = reader.readLine()) != null) {
                 item = line.split(",");
                 if (item.length != 8)

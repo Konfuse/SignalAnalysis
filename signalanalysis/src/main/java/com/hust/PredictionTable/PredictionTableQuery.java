@@ -27,6 +27,7 @@ public class PredictionTableQuery {
     public String predit(PredictionType predictionType, int year, int month, int day, int lon, int lat) {
         JSONObject jsonObject = new JSONObject();
         String type, row = null, value = null, startTime = null, endTime = null;
+        String start, end;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendarStamp = Calendar.getInstance();
 
@@ -65,7 +66,15 @@ public class PredictionTableQuery {
                 + String.format("%03d", lon)
                 + ","
                 + String.format("%03d", lat);
-        List<Result> resultList = HBaseUtil.getDataByFilter(tableName, startTime, endTime, regex);
+        start = startTime + ":"
+                + String.format("%03d", lon)
+                + ","
+                + String.format("%03d", lat);
+        end = endTime + ":"
+                + String.format("%03d", lon)
+                + ","
+                + String.format("%03d", lat);
+        List<Result> resultList = HBaseUtil.getDataByFilter(tableName, start, end, regex);
 
         for (Result result : resultList) {
             for (Cell cell : result.listCells()) {

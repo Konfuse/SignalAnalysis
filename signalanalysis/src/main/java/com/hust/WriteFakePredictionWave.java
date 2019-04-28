@@ -11,7 +11,7 @@ import java.util.Calendar;
  */
 public class WriteFakePredictionWave {
     public static void main(String[] args) throws ParseException {
-        String path = "C:/Users/Konfuse/Desktop/BigDataProject/PredictionWaveFake.csv";
+        String path = "/home/test/Documents/data/PredictionWaveFake.csv";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendarStart = Calendar.getInstance();
         calendarStart.setTime(simpleDateFormat.parse("2019-01-01"));

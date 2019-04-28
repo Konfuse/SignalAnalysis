@@ -1,5 +1,6 @@
 package com.hust.ResultTable;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hust.Util.HBaseUtil;
 import org.apache.hadoop.hbase.client.Connection;
 
@@ -32,6 +33,7 @@ public class ResultTableInsertFromCsv {
         Map<String, Map<Integer, Double>> yearProbMap_BDGD = new HashMap<>(), monthProbMap_BDGD = new HashMap<>();
         Map<String, Map<Integer, Double>> yearProbMap_BDQD = new HashMap<>(), monthProbMap_BDQD = new HashMap<>();
         Map<String, Long> yearProbMap_Num = new HashMap<>(), monthProbMap_Num = new HashMap<>();
+        JSONObject json_BDGD = new JSONObject(); JSONObject json_BDQD = new JSONObject();
 
         try {
             System.out.println("start import data from csv...");
@@ -291,65 +293,76 @@ public class ResultTableInsertFromCsv {
             //travel heat year map
             for (String key : heatYearMap_BDGD.keySet()) {
                 for (String s : heatYearMap_BDGD.get(key).keySet()) {
-                    heatYearMap_BDGD.get(key).replace(s, heatYearMap_BDGD.get(key).get(s) / heatYearMap_Num.get(key).get(s));
-                    heatYearMap_BDQD.get(key).replace(s, heatYearMap_BDQD.get(key).get(s) / heatYearMap_Num.get(key).get(s));
+                    json_BDGD.put(s, heatYearMap_BDGD.get(key).get(s) / heatYearMap_Num.get(key).get(s));
+                    json_BDQD.put(s, heatYearMap_BDQD.get(key).get(s) / heatYearMap_Num.get(key).get(s));
                 }
-                HBaseUtil.insertData(conn, tableName, "heat_year_average", "bdgd", key, heatYearMap_BDGD.get(key).toString());
-                HBaseUtil.insertData(conn, tableName, "heat_year_average", "bdqd", key, heatYearMap_BDQD.get(key).toString());
+                HBaseUtil.insertData(conn, tableName, "heat_year_average", "bdgd", key, json_BDGD.toJSONString());
+                HBaseUtil.insertData(conn, tableName, "heat_year_average", "bdqd", key, json_BDQD.toJSONString());
+                json_BDGD.clear(); json_BDQD.clear();
             }
             System.out.println("heat year map done...");
+
             //travel heat month map
             for (String key : heatMonthMap_BDGD.keySet()) {
                 for (String s : heatMonthMap_BDGD.get(key).keySet()) {
-                    heatMonthMap_BDGD.get(key).replace(s, heatMonthMap_BDGD.get(key).get(s) / heatMonthMap_Num.get(key).get(s));
-                    heatMonthMap_BDQD.get(key).replace(s, heatMonthMap_BDQD.get(key).get(s) / heatMonthMap_Num.get(key).get(s));
+                    json_BDGD.put(s, heatMonthMap_BDGD.get(key).get(s) / heatMonthMap_Num.get(key).get(s));
+                    json_BDQD.put(s, heatMonthMap_BDQD.get(key).get(s) / heatMonthMap_Num.get(key).get(s));
                 }
-                HBaseUtil.insertData(conn, tableName, "heat_month_average", "bdgd", key, heatMonthMap_BDGD.get(key).toString());
-                HBaseUtil.insertData(conn, tableName, "heat_month_average", "bdqd", key, heatMonthMap_BDQD.get(key).toString());
+                HBaseUtil.insertData(conn, tableName, "heat_month_average", "bdgd", key, json_BDGD.toJSONString());
+                HBaseUtil.insertData(conn, tableName, "heat_month_average", "bdqd", key, json_BDQD.toJSONString());
+                json_BDGD.clear(); json_BDQD.clear();
             }
             System.out.println("heat month map done...");
+
             //travel every year average
             for (String key : yearAvgMap_BDGD.keySet()) {
                 for (String s : yearAvgMap_BDGD.get(key).keySet()) {
-                    yearAvgMap_BDGD.get(key).replace(s, yearAvgMap_BDGD.get(key).get(s) / yearAvgMap_Num.get(key).get(s));
-                    yearAvgMap_BDQD.get(key).replace(s, yearAvgMap_BDQD.get(key).get(s) / yearAvgMap_Num.get(key).get(s));
+                    json_BDGD.put(s, yearAvgMap_BDGD.get(key).get(s) / yearAvgMap_Num.get(key).get(s));
+                    json_BDQD.put(s, yearAvgMap_BDQD.get(key).get(s) / yearAvgMap_Num.get(key).get(s));
                 }
-                HBaseUtil.insertData(conn, tableName, key, "bdgd", "value", yearAvgMap_BDGD.get(key).toString());
-                HBaseUtil.insertData(conn, tableName, key, "bdqd", "value", yearAvgMap_BDQD.get(key).toString());
+                HBaseUtil.insertData(conn, tableName, key, "bdgd", "value", json_BDGD.toJSONString());
+                HBaseUtil.insertData(conn, tableName, key, "bdqd", "value", json_BDQD.toJSONString());
+                json_BDGD.clear(); json_BDQD.clear();
             }
             System.out.println("every year average done...");
+
             //travel every month average
             for (String key : monthAvgMap_BDGD.keySet()) {
                 for (String s : monthAvgMap_BDGD.get(key).keySet()) {
-                    monthAvgMap_BDGD.get(key).replace(s, monthAvgMap_BDGD.get(key).get(s) / monthAvgMap_Num.get(key).get(s));
-                    monthAvgMap_BDQD.get(key).replace(s, monthAvgMap_BDQD.get(key).get(s) / monthAvgMap_Num.get(key).get(s));
+                    json_BDGD.put(s, monthAvgMap_BDGD.get(key).get(s) / monthAvgMap_Num.get(key).get(s));
+                    json_BDQD.put(s, monthAvgMap_BDQD.get(key).get(s) / monthAvgMap_Num.get(key).get(s));
                 }
-                HBaseUtil.insertData(conn, tableName, key, "bdgd", "value", monthAvgMap_BDGD.get(key).toString());
-                HBaseUtil.insertData(conn, tableName, key, "bdqd", "value", monthAvgMap_BDQD.get(key).toString());
+                HBaseUtil.insertData(conn, tableName, key, "bdgd", "value", json_BDGD.toJSONString());
+                HBaseUtil.insertData(conn, tableName, key, "bdqd", "value", json_BDQD.toJSONString());
+                json_BDGD.clear(); json_BDQD.clear();
             }
             System.out.println("every month average done...");
+
             //travel year probability
             for (String key : yearProbMap_BDGD.keySet()) {
                 for (int s : yearProbMap_BDGD.get(key).keySet()) {
-                    yearProbMap_BDGD.get(key).replace(s, yearProbMap_BDGD.get(key).get(s) / yearProbMap_Num.get(key));
+                    json_BDGD.put(String.valueOf(s), yearProbMap_BDGD.get(key).get(s) / yearProbMap_Num.get(key));
                 }
                 for (int s : yearProbMap_BDQD.get(key).keySet()) {
-                    yearProbMap_BDQD.get(key).replace(s, yearProbMap_BDQD.get(key).get(s) / yearProbMap_Num.get(key));
+                    json_BDQD.put(String.valueOf(s), yearProbMap_BDQD.get(key).get(s) / yearProbMap_Num.get(key));
                 }
-                HBaseUtil.insertData(conn, tableName, key, "bdgd", "value", yearProbMap_BDGD.get(key).toString());
-                HBaseUtil.insertData(conn, tableName, key, "bdqd", "value", yearProbMap_BDQD.get(key).toString());
+                HBaseUtil.insertData(conn, tableName, key, "bdgd", "value", json_BDGD.toJSONString());
+                HBaseUtil.insertData(conn, tableName, key, "bdqd", "value", json_BDQD.toJSONString());
+                json_BDGD.clear(); json_BDQD.clear();
             }
             System.out.println("year probability done...");
+
             //travel month probability
             for (String key : monthProbMap_BDGD.keySet()) {
                 for (int s : monthProbMap_BDGD.get(key).keySet()) {
-                    monthProbMap_BDGD.get(key).replace(s, monthProbMap_BDGD.get(key).get(s) / monthProbMap_Num.get(key));
+                    json_BDGD.put(String.valueOf(s), monthProbMap_BDGD.get(key).get(s) / monthProbMap_Num.get(key));
                 }
                 for (int s : monthProbMap_BDQD.get(key).keySet()) {
-                    monthProbMap_BDQD.get(key).replace(s, monthProbMap_BDQD.get(key).get(s) / monthProbMap_Num.get(key));
+                    json_BDQD.put(String.valueOf(s), monthProbMap_BDQD.get(key).get(s) / monthProbMap_Num.get(key));
                 }
-                HBaseUtil.insertData(conn, tableName, key, "bdgd", "value", monthProbMap_BDGD.get(key).toString());
-                HBaseUtil.insertData(conn, tableName, key, "bdqd", "value", monthProbMap_BDQD.get(key).toString());
+                HBaseUtil.insertData(conn, tableName, key, "bdgd", "value", json_BDGD.toJSONString());
+                HBaseUtil.insertData(conn, tableName, key, "bdqd", "value", json_BDQD.toJSONString());
+                json_BDGD.clear(); json_BDQD.clear();
             }
             System.out.println("month probability done...\nAll done.");
         } catch (IOException e) {

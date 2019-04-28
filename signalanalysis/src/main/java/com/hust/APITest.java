@@ -1,6 +1,7 @@
 package com.hust;
 
 import com.hust.LowAltitudeWaveTable.LowAltitudeWaveTableQuery;
+import com.hust.PredictionTable.PredictionTableQuery;
 import com.hust.ResultTable.ResultTableQuery;
 
 /**
@@ -24,5 +25,8 @@ public class APITest {
         LowAltitudeWaveTableQuery lowAltitudeWaveTableQuery = new LowAltitudeWaveTableQuery();
         System.out.println(lowAltitudeWaveTableQuery.queryProbablyPerMonth("47122", LowAltitudeWaveTableQuery.DuctType.SURFACE));
         System.out.println(lowAltitudeWaveTableQuery.queryMonthAverage("47122", LowAltitudeWaveTableQuery.DuctType.SURFACE, LowAltitudeWaveTableQuery.DataType.SURFACE_GD));
+
+        PredictionTableQuery predictionTableQuery = new PredictionTableQuery();
+        System.out.println(predictionTableQuery.predit(PredictionTableQuery.PredictionType.BDQD, 2019, 3, 21, 100, 3));
     }
 }

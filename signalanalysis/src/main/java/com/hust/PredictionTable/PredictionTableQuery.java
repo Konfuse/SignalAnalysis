@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.hust.Util.HBaseUtil;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
+import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,17 +28,18 @@ public class PredictionTableQuery {
 
     public String predit(PredictionType predictionType, int year, int month, int day, int lon, int lat) {
         JSONObject jsonObject = new JSONObject();
-        String type, row = null, value = null, startTime = null, endTime = null;
-        String start, end;
+        String type, startTime, date, row;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendarStamp = Calendar.getInstance();
+        Calendar calendarEnd = Calendar.getInstance();
+        Connection connection = null;
 
         //check year
         if (year != 2019) {
             return null;
         }
 
-        //judge type of value
+        //check type of value
         if (predictionType == PredictionType.BDGD) {
             type = "bdgd";
         } else {
@@ -47,47 +50,28 @@ public class PredictionTableQuery {
         try {
             startTime = String.format("%04d", year) + "-" + String.format("%02d", month) + "-" + String.format("%02d", day);
             calendarStamp.setTime(simpleDateFormat.parse(startTime));
-            calendarStamp.add(Calendar.DAY_OF_YEAR, 6);
-            if (simpleDateFormat.format(calendarStamp.getTime()).compareTo("2019-12-31") > 0) {
-                endTime = "2019-12-31";
-            } else {
-                endTime = simpleDateFormat.format(calendarStamp.getTime());
-            }
+            calendarEnd.setTime(simpleDateFormat.parse("2020-01-01"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        //create regex for querying
-        String regex = "[\\d]{4}"
-                + "-"
-                + "[\\d]{2}"
-                + "-"
-                + "[\\d]{2}:"
-                + String.format("%03d", lon)
-                + ","
-                + String.format("%03d", lat);
-        start = startTime + ":"
-                + String.format("%03d", lon)
-                + ","
-                + String.format("%03d", lat);
-        end = endTime + ":"
-                + String.format("%03d", lon)
-                + ","
-                + String.format("%03d", lat);
-        List<Result> resultList = HBaseUtil.getDataByFilter(tableName, start, end, regex);
-
-        for (Result result : resultList) {
-            for (Cell cell : result.listCells()) {
-                //if find the correct type, break and use the value
-                if ((Bytes.toString(CellUtil.cloneQualifier(cell))).equals(type)) {
-                    row = Bytes.toString(CellUtil.cloneRow(cell));
-                    value = Bytes.toString(CellUtil.cloneValue(cell));
-                    break;
-                }
+        try {
+            connection = HBaseUtil.init();
+            //travel prediction result
+            for (int i = 0; i < 7 && !calendarStamp.equals(calendarEnd); i++) {
+                date = simpleDateFormat.format(calendarStamp.getTime());
+                row = date + ":" + String.format("%03d", lon) + String.format("%03d", lat);
+                jsonObject.put(date, HBaseUtil.getCellData(connection, tableName, row, "wave", type));
+                calendarStamp.add(Calendar.DAY_OF_YEAR, 1);
             }
-            if (row == null)
-                continue;
-            jsonObject.put(row.substring(0, row.indexOf(":")), Double.parseDouble(value));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                HBaseUtil.closeAll(connection);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return jsonObject.toJSONString();

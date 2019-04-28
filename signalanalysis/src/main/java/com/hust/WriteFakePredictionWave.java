@@ -24,7 +24,7 @@ public class WriteFakePredictionWave {
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(path));
-            writer.write("LON,LAT,YEAR,MONTH,BDGD,BDQD");
+            writer.write("LON,LAT,YEAR,MONTH,DAY,BDGD,BDQD");
             for (lon = 100; lon <= 150; lon++) {
                 for (lat = 0; lat <= 50; lat++) {
                     calendarStart.setTime(simpleDateFormat.parse("2019-01-01"));

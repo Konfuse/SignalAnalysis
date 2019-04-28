@@ -60,7 +60,7 @@ public class PredictionTableQuery {
             //travel prediction result
             for (int i = 0; i < 7 && !calendarStamp.equals(calendarEnd); i++) {
                 date = simpleDateFormat.format(calendarStamp.getTime());
-                row = date + ":" + String.format("%03d", lon) + String.format("%03d", lat);
+                row = date + ":" + String.format("%03d", lon) + "," + String.format("%03d", lat);
                 jsonObject.put(date, HBaseUtil.getCellData(connection, tableName, row, "wave", type));
                 calendarStamp.add(Calendar.DAY_OF_YEAR, 1);
             }

@@ -27,8 +27,6 @@ public class PredictionTableInsert {
             System.out.println(reader.readLine());
             while ((line = reader.readLine()) != null) {
                 item = line.split(",");
-                if (item.length != 8)
-                    continue;
                 lon = item[0];
                 lat = item[1];
                 year = item[2];

@@ -46,7 +46,7 @@ public class PredictionTableInsert {
                         + String.format("%03d", Integer.parseInt(lon))
                         + ","
                         + String.format("%03d", Integer.parseInt(lat));
-                System.out.println(row + ": " + bdgd + ", " + bdqd);
+                System.out.println(row + ":" + bdgd + "," + bdqd);
                 HBaseUtil.insertData(conn, "prediction", row, "wave", "bdgd", bdgd);
                 HBaseUtil.insertData(conn, "prediction", row, "wave", "bdqd", bdqd);
             }

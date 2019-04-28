@@ -1,5 +1,8 @@
 package com.hust;
 
+import com.hust.LowAltitudeWaveTable.LowAltitudeWaveTableQuery;
+import com.hust.ResultTable.ResultTableQuery;
+
 /**
  * @Author: Konfuse
  * @Date: 2019/4/15 14:07

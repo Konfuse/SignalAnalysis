@@ -1,4 +1,4 @@
-package com.hust;
+package com.hust.ResultTable;
 
 import com.hust.Util.HBaseUtil;
 

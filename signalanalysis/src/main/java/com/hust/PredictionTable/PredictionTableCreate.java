@@ -1,4 +1,4 @@
-package com.hust;
+package com.hust.PredictionTable;
 
 import com.hust.Util.HBaseUtil;
 

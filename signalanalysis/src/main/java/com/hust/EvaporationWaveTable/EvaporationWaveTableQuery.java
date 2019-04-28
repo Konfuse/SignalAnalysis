@@ -1,4 +1,4 @@
-package com.hust;
+package com.hust.EvaporationWaveTable;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hust.Util.HBaseUtil;

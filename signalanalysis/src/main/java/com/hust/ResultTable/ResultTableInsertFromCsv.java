@@ -1,4 +1,4 @@
-package com.hust;
+package com.hust.ResultTable;
 
 import com.hust.Util.HBaseUtil;
 import org.apache.hadoop.hbase.client.Connection;
@@ -14,7 +14,7 @@ import java.util.Map;
  * @Date: 2019/4/26 9:25
  */
 public class ResultTableInsertFromCsv {
-    public static String tableName = "";
+    public static String tableName = "result_of_evaporation";
     public static void main(String[] args) {
         String path = "/home/test/Documents/data/EvaporationWaveFake.csv";
         Connection conn = null;
@@ -140,7 +140,7 @@ public class ResultTableInsertFromCsv {
                     });
                 }
                 //every year average
-                row = "every_year_average" + String.format("%03d", lon) + "," + String.format("%03d", lat);
+                row = "every_year_average:" + String.format("%03d", lon) + "," + String.format("%03d", lat);
                 String finalYearJsonKey = String.format("%04d", year);
                 double finalBdgd = bdgd;
                 double finalBdqd = bdqd;
@@ -181,7 +181,7 @@ public class ResultTableInsertFromCsv {
                     return v;
                 });
                 //every month average
-                row = "every_month_average" + String.format("%03d", lon) + "," + String.format("%03d", lat);
+                row = "every_month_average:" + String.format("%03d", lon) + "," + String.format("%03d", lat);
                 String finalMonthJsonKey = String.format("%02d", month);
                 monthAvgMap_BDGD.compute(row, (k, v) -> {
                     if (v == null) {
@@ -332,6 +332,8 @@ public class ResultTableInsertFromCsv {
             for (String key : yearProbMap_BDGD.keySet()) {
                 for (int s : yearProbMap_BDGD.get(key).keySet()) {
                     yearProbMap_BDGD.get(key).replace(s, yearProbMap_BDGD.get(key).get(s) / yearProbMap_Num.get(key));
+                }
+                for (int s : yearProbMap_BDQD.get(key).keySet()) {
                     yearProbMap_BDQD.get(key).replace(s, yearProbMap_BDQD.get(key).get(s) / yearProbMap_Num.get(key));
                 }
                 HBaseUtil.insertData(conn, tableName, key, "bdgd", "value", yearProbMap_BDGD.get(key).toString());
@@ -342,6 +344,8 @@ public class ResultTableInsertFromCsv {
             for (String key : monthProbMap_BDGD.keySet()) {
                 for (int s : monthProbMap_BDGD.get(key).keySet()) {
                     monthProbMap_BDGD.get(key).replace(s, monthProbMap_BDGD.get(key).get(s) / monthProbMap_Num.get(key));
+                }
+                for (int s : monthProbMap_BDQD.get(key).keySet()) {
                     monthProbMap_BDQD.get(key).replace(s, monthProbMap_BDQD.get(key).get(s) / monthProbMap_Num.get(key));
                 }
                 HBaseUtil.insertData(conn, tableName, key, "bdgd", "value", monthProbMap_BDGD.get(key).toString());

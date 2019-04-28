@@ -216,10 +216,18 @@ public class HBaseUtil {
         return getResultsFromScan(tableName, scan);
     }
 
-    public static List<Result> getDataByRange(String tableName, String startRowKey, String endRowKey) {
+    public static List<Result> getDataByFilter(String tableName, String startRowKey, String endRowKey, String regexKey) {
+        //a row filter using regex
+        RegexStringComparator rc = new RegexStringComparator(regexKey);
+        RowFilter rowFilter = new RowFilter(CompareFilter.CompareOp.EQUAL, rc);
+
+        //setup a scan and set the range and regex of row
         Scan scan = new Scan();
         scan.setStartRow(startRowKey.getBytes());
         scan.setStopRow(endRowKey.getBytes());
+        scan.setFilter(rowFilter);
+
+        //get result
         return getResultsFromScan(tableName, scan);
     }
 

@@ -1,4 +1,4 @@
-package com.hust;
+package com.hust.LowAltitudeWaveTable;
 
 import com.hust.Util.HBaseUtil;
 import org.apache.hadoop.hbase.client.Connection;

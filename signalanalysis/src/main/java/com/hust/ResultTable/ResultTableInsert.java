@@ -1,5 +1,6 @@
-package com.hust;
+package com.hust.ResultTable;
 
+import com.hust.EvaporationWaveTable.EvaporationWaveTableQuery;
 import com.hust.Util.HBaseUtil;
 import org.apache.hadoop.hbase.client.Connection;
 

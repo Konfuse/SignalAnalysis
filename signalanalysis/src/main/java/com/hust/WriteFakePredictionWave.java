@@ -11,7 +11,7 @@ import java.util.Calendar;
  */
 public class WriteFakePredictionWave {
     public static void main(String[] args) throws ParseException {
-        String path = "/home/test/Documents/data/PredictionWaveFake.csv";
+        String path = "C:/Users/Konfuse/Desktop/BigDataProject/PredictionWaveFake.csv";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendarStart = Calendar.getInstance();
         calendarStart.setTime(simpleDateFormat.parse("2019-01-01"));
@@ -24,7 +24,7 @@ public class WriteFakePredictionWave {
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(path));
-            writer.write("LON,LAT,YEAR,MONTH,HOUR,BDGD,BDQD");
+            writer.write("LON,LAT,YEAR,MONTH,BDGD,BDQD");
             for (lon = 100; lon <= 150; lon++) {
                 for (lat = 0; lat <= 50; lat++) {
                     calendarStart.setTime(simpleDateFormat.parse("2019-01-01"));

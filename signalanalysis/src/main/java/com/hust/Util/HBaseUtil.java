@@ -16,8 +16,11 @@ import java.util.List;
  */
 public class HBaseUtil {
     public static Connection init() throws IOException {
-        Configuration conf = HBaseConfiguration.create();
-        Connection conn = ConnectionFactory.createConnection(conf);
+        Configuration configuration = HBaseConfiguration.create();
+//        configuration.set("hbase.zookeeper.quorum","168.1.0.88,168.1.0.89,168.1.0.90,168.1.0.91,168.1.0.92");  //hbase 服务地址
+//        configuration.set("hbase.zookeeper.property.clientPort","2181"); //端口号
+//        configuration.set("zookeeper.znode.parent", "/hbase-unsecure");
+        Connection conn = ConnectionFactory.createConnection(configuration);
         return conn;
     }
 

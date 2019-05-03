@@ -26,7 +26,7 @@ public class PredictionTableQuery {
         BDQD
     }
 
-    public String predit(PredictionType predictionType, int year, int month, int day, int lon, int lat) {
+    public String predict(PredictionType predictionType, int year, int month, int day, int lon, int lat) {
         JSONObject jsonObject = new JSONObject();
         String type, startTime, date, row;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -74,6 +74,83 @@ public class PredictionTableQuery {
             }
         }
 
+        return jsonObject.toJSONString();
+    }
+
+    public double predictTheDay(PredictionType predictionType, int lon, int lat) {
+        Connection connection = null;
+        String type, row, date;
+        double value = -1.0;
+
+        //check type of value
+        if (predictionType == PredictionType.BDGD) {
+            type = "bdgd";
+        } else {
+            type = "bdqd";
+        }
+
+        // get current time
+        // if MM-dd equals 02-29, replace with 02-28
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd");
+        date = simpleDateFormat.format(new Date());
+        if ("02-29".equals(date)) {
+            date = "02-28";
+        }
+
+        try {
+            connection = HBaseUtil.init();
+            row = "2019-" + date + ":" + String.format("%03d", lon) + "," + String.format("%03d", lat);
+            String valueStr = HBaseUtil.getCellData(connection, tableName, row, "wave", type);
+            if (valueStr != null) {
+                value = Double.parseDouble(valueStr);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return value;
+    }
+
+    public String predictAllPosition(PredictionType predictionType, int year, int month, int day) {
+        JSONObject jsonObject = new JSONObject();
+        String type, regex, row = null, position, value = null;
+        Connection connection = null;
+
+        //check year
+        if (year != 2019) {
+            return null;
+        }
+
+        //check type of value
+        if (predictionType == PredictionType.BDGD) {
+            type = "bdgd";
+        } else {
+            type = "bdqd";
+        }
+
+        regex = String.format("%04d", year)
+                + "-"
+                + String.format("%02d", month)
+                + "-"
+                + String.format("%02d", day)
+                + ".*";
+
+        List<Result> resultList = HBaseUtil.getDataByRegex(tableName, regex);
+        //travel result sets, convert value to json string, and push into a list
+        for (Result result : resultList) {
+            for (Cell cell : result.listCells()) {
+                //if find the correct type, break and use the value
+                row = Bytes.toString(CellUtil.cloneRow(cell));
+                if ((Bytes.toString(CellUtil.cloneQualifier(cell))).equals(type)) {
+                    value = Bytes.toString(CellUtil.cloneValue(cell));
+                    break;
+                }
+            }
+            if (row == null)
+                continue;
+            //Calculation
+            position = row.substring(row.indexOf(":") + 1);
+            jsonObject.put(position, Double.parseDouble(value));
+        }
         return jsonObject.toJSONString();
     }
 }

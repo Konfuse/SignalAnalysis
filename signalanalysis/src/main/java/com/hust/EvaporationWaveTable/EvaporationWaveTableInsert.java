@@ -13,7 +13,7 @@ import java.io.IOException;
  */
 public class EvaporationWaveTableInsert {
     public static void main(String[] args) {
-        String path = "/home/konfuse/Documents/WorkDir/EvaporationWave.csv";
+        String path = "/home/seri/HisData/Evaprotion.csv";
 
         Connection conn = null;
         BufferedReader reader;

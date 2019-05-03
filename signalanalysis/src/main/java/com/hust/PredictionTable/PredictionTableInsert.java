@@ -13,40 +13,50 @@ import java.io.IOException;
  */
 public class PredictionTableInsert {
     public static void main(String[] args) {
-        String path = "/home/test/Documents/data/PredictionWaveFake.csv";
+        String[] paths = {
+                "BDGDpredictions.csv",
+                "BDQDpredictions.csv"
+        };
 
         Connection conn = null;
         BufferedReader reader;
-        String[] item;
-        String line;
-        String row, lon, lat, year, month, day, bdgd, bdqd;
+        String[] items, temp, message;
+        String line, name, type;
+        String row, lon, lat, year, month, day, value;
 
         try {
             conn = HBaseUtil.init();
-            reader = new BufferedReader(new FileReader(path));
-            System.out.println(reader.readLine());
-            while ((line = reader.readLine()) != null) {
-                item = line.split(",");
-                lon = item[0];
-                lat = item[1];
-                year = item[2];
-                month = item[3];
-                day = item[4];
-                bdgd = item[5];
-                bdqd = item[6];
-                //row key format(yyyy-mm-dd-hh:xxx,yyy)
-                row = String.format("%04d", Integer.parseInt(year))
-                        + "-"
-                        + String.format("%02d", Integer.parseInt(month))
-                        + "-"
-                        + String.format("%02d", Integer.parseInt(day))
-                        + ":"
-                        + String.format("%03d", Integer.parseInt(lon))
-                        + ","
-                        + String.format("%03d", Integer.parseInt(lat));
-                System.out.println(row + ":" + bdgd + "," + bdqd);
-                HBaseUtil.insertData(conn, "prediction", row, "wave", "bdgd", bdgd);
-                HBaseUtil.insertData(conn, "prediction", row, "wave", "bdqd", bdqd);
+            for (String path : paths) {
+                reader = new BufferedReader(new FileReader(path));
+
+                name = path.substring(path.lastIndexOf("/") + 1);
+                if ("BDGDpredictions.csv".equals(name)) type = "bdgd";
+                else type = "bdqd";
+
+                System.out.println(reader.readLine());
+                while ((line = reader.readLine()) != null) {
+                    items = line.split(",");
+                    message = items[0].split("-");
+                    value = items[1];
+
+                    year = message[0];
+                    month = message[1];
+                    day = message[2];
+                    lon = message[3];
+                    lat = message[4];
+                    //row key format(yyyy-mm-dd-hh:xxx,yyy)
+                    row = String.format("%04d", Integer.parseInt(year))
+                            + "-"
+                            + String.format("%02d", Integer.parseInt(month))
+                            + "-"
+                            + String.format("%02d", Integer.parseInt(day))
+                            + ":"
+                            + String.format("%03d", Integer.parseInt(lon))
+                            + ","
+                            + String.format("%03d", Integer.parseInt(lat));
+                    System.out.println(row + ":" + value);
+                    HBaseUtil.insertData(conn, "prediction", row, "wave", type, value);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

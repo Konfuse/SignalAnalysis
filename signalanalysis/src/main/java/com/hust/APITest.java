@@ -27,6 +27,6 @@ public class APITest {
         System.out.println(lowAltitudeWaveTableQuery.queryMonthAverage("47122", LowAltitudeWaveTableQuery.DuctType.SURFACE, LowAltitudeWaveTableQuery.DataType.SURFACE_GD));
 
         PredictionTableQuery predictionTableQuery = new PredictionTableQuery();
-        System.out.println(predictionTableQuery.predit(PredictionTableQuery.PredictionType.BDQD, 2019, 3, 21, 100, 3));
+        System.out.println(predictionTableQuery.predict(PredictionTableQuery.PredictionType.BDQD, 2019, 3, 21, 100, 3));
     }
 }

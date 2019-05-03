@@ -13,7 +13,7 @@ import java.io.IOException;
  */
 public class LowAltitudeWaveTableInsert {
     public static void main(String[] args) {
-        String path = "/home/test/Documents/LowAltitude.csv";
+        String path = "C:/Users/Konfuse/Desktop/HisData/LowAltitude.csv";
 
         Connection connection = null;
         BufferedReader reader;

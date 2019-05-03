@@ -17,7 +17,7 @@ import java.util.Map;
 public class ResultTableInsertFromCsv {
     public static String tableName = "result_of_evaporation";
     public static void main(String[] args) {
-        String path = "/home/test/Documents/data/EvaporationWaveFake.csv";
+        String path = "C:/Users/Konfuse/Desktop/HisData/Evaprotion.csv";
         Connection conn = null;
         BufferedReader reader;
         String[] item, columns;
@@ -281,7 +281,7 @@ public class ResultTableInsertFromCsv {
                     if (v == null) return 1L;
                     return v + 1;
                 });
-                System.out.println("data " + (++count) + "has been processed..");
+                System.out.println("data " + (++count) + " has been processed..");
             }
             System.out.println("process all data.");
         } catch (IOException e) {

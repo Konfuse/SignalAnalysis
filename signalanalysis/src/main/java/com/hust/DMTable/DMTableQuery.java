@@ -256,7 +256,7 @@ public class DMTableQuery {
         BufferedReader reader;
         String[] items;
         String line;
-        double[] position = new double[2];
+        double[] position = {-999.0, -999.0};
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(path), "GBK"));
 //            System.out.println(reader.readLine());
@@ -439,7 +439,10 @@ public class DMTableQuery {
                     items[6] = items[6].replace(";", ",");
                     items[7] = items[7].replace(";", ",");
                     items[8] = items[8].replace(";", ",");
-                    list.addAll(Arrays.asList(items));
+                    list.add(items[9]);
+                    for (int i = 0; i < 9; i++) {
+                        list.add(items[i]);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -470,7 +473,8 @@ public class DMTableQuery {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 rowCount++;
-                for (int i = 1; i <= 10; i++) {
+                list.add(resultSet.getString(10));
+                for (int i = 1; i <= 9; i++) {
                     list.add(resultSet.getString(i));
                 }
             }
@@ -506,7 +510,10 @@ public class DMTableQuery {
                 items = line.split(",");
                 if (items[8].equals(sys_name)) {
                     rowCount++;
-                    list.addAll(Arrays.asList(items));
+                    list.add(items[8]);
+                    for (int i = 0; i < 8; i++) {
+                        list.add(items[i]);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -537,7 +544,8 @@ public class DMTableQuery {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 rowCount++;
-                for (int i = 1; i <= 9; i++) {
+                list.add(resultSet.getString(9));
+                for (int i = 1; i <= 8; i++) {
                     list.add(resultSet.getString(i));
                 }
             }
@@ -575,7 +583,10 @@ public class DMTableQuery {
                     rowCount++;
                     items[3] = items[3].replace(";", ",");
                     items[4] = items[4].replace(";", ",");
-                    list.addAll(Arrays.asList(items));
+                    list.add(items[5]);
+                    for (int i = 0; i < 5; i++) {
+                        list.add(items[i]);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -606,7 +617,8 @@ public class DMTableQuery {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 rowCount++;
-                for (int i = 1; i <= 6; i++) {
+                list.add(resultSet.getString(6));
+                for (int i = 1; i <= 5; i++) {
                     list.add(resultSet.getString(i));
                 }
             }

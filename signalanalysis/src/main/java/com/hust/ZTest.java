@@ -43,5 +43,8 @@ public class ZTest {
         jsonObject.put("1", arrays);
         jsonObject.put("2", lists);
         System.out.println(jsonObject.toJSONString());
+
+        double[] position = new double[0];
+        System.out.println(Arrays.toString(position));
     }
 }

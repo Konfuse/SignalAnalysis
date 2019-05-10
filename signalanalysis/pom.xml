@@ -19,6 +19,18 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.dm</groupId>
+            <artifactId>jdbc</artifactId>
+            <version>1.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>progress.datadirect.greenplum</groupId>
+            <artifactId>jdbc</artifactId>
+            <version>5.1.4</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.51</version>

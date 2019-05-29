@@ -18,41 +18,6 @@ public class ZTest {
     private static final String PASS = "8drVKOqWNq";
 
     public static void main(String[] args) {
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet resultSet = null;
-        List<JSONObject> list = new ArrayList<>();
-        JSONObject jsonObject;
-        String target_name;
-        double rcs, height;
-        String sql = "SELECT t1.TARGET_TYPE, t1.TARGET_RCS, t1.TARGET_HEIGHT "
-                + "FROM DUCT_TARGET_PARA t1 ";
-        try {
-            Class.forName(JDBC_DRIVER);
-            System.out.println("Connecting to DM database...");
-            connection = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("Connected database successfully...");
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                jsonObject = new JSONObject();
-                target_name = resultSet.getString(1);
-                rcs = resultSet.getDouble(2);
-                height = resultSet.getDouble(3);
-                jsonObject.put("name", target_name);
-                jsonObject.put("rcs", rcs);
-                jsonObject.put("height", height);
-                list.add(jsonObject);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                DMBaseUtil.closeAll(connection, statement);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println(list.toString());
+        System.out.println(String.format("%02d", Integer.parseInt("01")));
     }
 }
